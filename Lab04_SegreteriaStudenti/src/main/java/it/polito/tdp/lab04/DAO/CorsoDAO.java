@@ -197,5 +197,26 @@ public boolean isIscrittoAlCorso(Corso corso,int matricola) {
 		return false;
 	}
 	
-
+	public boolean esisteCorso(Corso corso) {
+		String sql ="select * from corso where codins = ?";
+		try {
+			Connection conn=ConnectDB.getConnection();
+			PreparedStatement st=conn.prepareStatement(sql);
+			st.setString(1, corso.getCodins());
+			ResultSet rs=st.executeQuery();
+			 if(rs.next()) {
+				 rs.close();
+				 st.close();
+				 conn.close();
+				 return true;
+			 } else {
+				 rs.close();
+				 st.close();
+				 conn.close();
+				 return false;
+				 }
+		}catch(SQLException e) {
+			throw new RuntimeException(e);
+		}
+	}
 }

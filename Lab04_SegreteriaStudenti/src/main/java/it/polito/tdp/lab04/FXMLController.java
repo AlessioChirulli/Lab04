@@ -55,14 +55,18 @@ private Model model;
     @FXML
     void doCercaCorsi(ActionEvent event) {
     	txtResult.clear();
+    	String s=new String();
     	this.boxCorsi.getSelectionModel().clearSelection();
     	try {
     	List<Corso>corsi=model.getCorsoStudente(Integer.parseInt(txtMatricola.getText()));
     	if(corsi.size()==0)
     		txtResult.setText("Spiacente,la matricola inserita non segue corsi");
     	for(Corso c:corsi) {
-    		txtResult.appendText(c.getCodins()+"\t"+c.getCrediti()+"\t"+c.getNome()+"\t"+c.getPd()+"\n");
+    		s+=String.format("%-8s", c.getCodins())+" "+String.format("%-4d", c.getCrediti())+" "+String.format("%-50s", c.getNome())+" "+String.format("%-4d\n",c.getPd());
+    		//txtResult.appendText(c.getCodins()+"\t"+c.getCrediti()+"\t"+c.getNome()+"\t"+c.getPd()+"\n");
+    	    //txtResult.appendText(s);
     	}
+    	txtResult.setText(s);
     	}catch(NumberFormatException nbe) {
     		txtResult.setText("Inserisci una matricola valida");
     	}
@@ -72,6 +76,7 @@ private Model model;
 
     @FXML
     void doCercaIscritti(ActionEvent event) {
+    	String ss=new String();
     	txtResult.clear();
     	if(this.boxCorsi.getValue() == null || this.boxCorsi.getValue().getCodins().equals("")) {
     	txtResult.setText("Inserisci un corso valido");	
@@ -79,10 +84,16 @@ private Model model;
     		List<Studente>studenti=model.getStudentiCorso(boxCorsi.getValue());
     		if(studenti.size()!=0) {
     		for(Studente s:studenti) {
-    			txtResult.appendText(s.getMatricola()+"\t"+s.getNome()+"\t"+s.getCognome()+"\t"+s.getCDS()+"\n");
+    			ss+=String.format("%-8d", s.getMatricola())+" "+String.format("%-25s", s.getNome())+" "+String.format("%-25s", s.getCognome())+" "+String.format("%-8s\n",s.getCDS());
+    			//txtResult.appendText(s.getMatricola()+"\t"+s.getNome()+"\t"+s.getCognome()+"\t"+s.getCDS()+"\n");
+    		    //txtResult.appendText(ss);
     		}
+    		txtResult.setText(ss.substring(0,ss.length()-1));
     		}else {
+    			if(this.model.esisteCorso(boxCorsi.getValue()))
     			txtResult.setText("Corso senza iscritti");
+    			else
+    				txtResult.setText("Il corso non esiste");
     		}
     	}
 
@@ -175,6 +186,6 @@ private Model model;
         assert btnIscrivi != null : "fx:id=\"brnIscrivi\" was not injected: check your FXML file 'Scene.fxml'.";
         assert txtResult != null : "fx:id=\"txtResult\" was not injected: check your FXML file 'Scene.fxml'.";
         assert btnReset != null : "fx:id=\"btnReset\" was not injected: check your FXML file 'Scene.fxml'.";
-
+        txtResult.setStyle("-fx-font-family:monospace");
     }
 }

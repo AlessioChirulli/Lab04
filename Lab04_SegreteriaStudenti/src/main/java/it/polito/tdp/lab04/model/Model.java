@@ -41,4 +41,8 @@ public boolean isStudenteIscritto(Corso corso,int matricola) {
 public boolean iscriviStudente(Corso corso,int matricola) {
 	return this.corso.inscriviStudenteACorso(matricola, corso);
 }
+
+public boolean esisteCorso(Corso corso) {
+	return this.esisteCorso(corso);
+}
 }
